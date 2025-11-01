@@ -12,29 +12,9 @@
         body, html {
             height: 100%;
             margin: 0;
-            /* New electronics world background */
-            background-color: #0d0d1a; /* Dark electronics background */
-            background-image: 
-                /* Dots (vias) at intersections */
-                radial-gradient(circle at 1px 1px, rgba(0, 255, 255, 0.4) 1px, transparent 0),
-                /* Main thin grid */
-                linear-gradient(rgba(0, 191, 255, 0.2) 1px, transparent 1px), 
-                linear-gradient(90deg, rgba(0, 191, 255, 0.2) 1px, transparent 1px),
-                /* Thicker "circuit traces" */
-                linear-gradient(rgba(0, 191, 255, 0.3) 2px, transparent 2px),
-                linear-gradient(90deg, rgba(0, 191, 255, 0.3) 2px, transparent 2px);
-            
-            /* Set different sizes and positions for the layers */
-            background-size: 
-                30px 30px, /* Dots size */
-                30px 30px, /* Main grid H */
-                30px 30px, /* Main grid V */
-                90px 90px, /* Thicker trace H */
-                90px 90px; /* Thicker trace V */
-                
+            background-color: #222; /* Dark background */
             font-family: 'Press Start 2P', cursive;
             overflow: hidden; /* Hide scrollbars */
-            position: relative; /* Needed for positioning components */
         }
 
         /* Container to center the text */
@@ -44,20 +24,28 @@
             justify-content: center;
             height: 100%;
             text-align: center;
-            position: relative; /* Ensure text is above components */
-            z-index: 10;
         }
 
         /* The main text styling */
         .minecraft-text {
-            /* Updated text color to match the electronics theme */
-            font-size: 5vw; /* Responsive font size */
-            color: #00BFFF; /* Electric blue */
-            
-            /* Combine animations: float and new text-flicker */
-            animation: 
-                float 3s ease-in-out infinite,
-                text-flicker 1.5s step-end infinite;
+            /* We set the main color to a "grass" green.
+              The text-shadow is the trick. We stack multiple shadows,
+              each one pixel lower, to create the 3D "dirt" block effect.
+            */
+            font-size: 4vw; /* Responsive font size */
+            color: gray; /* Minecraft grass green */
+            text-shadow: 
+                0px 1px 0px #333, /* Brown "dirt" shadow */
+                0px 2px 0px #333,
+                0px 3px 0px #333,
+                0px 4px 0px #333,
+                0px 5px 0px #333,
+                0px 6px 0px #333,
+                0px 7px 0px #333,
+                0px 8px 10px rgba(0,0,0,0.5); /* Faint drop shadow for depth */
+
+            /* Add a subtle animation to make it pop */
+            animation: float 3s ease-in-out infinite;
             letter-spacing: 0.1em; /* Space out the letters a bit */
         }
 
@@ -74,306 +62,15 @@
             }
         }
 
-        /* NEW: Keyframe for text "glitch" */
-        @keyframes text-flicker {
-            0%, 100%, 20%, 40%, 60%, 80% {
-                color: #00BFFF;
-                text-shadow: 
-                    0px 1px 0px #005A7F,
-                    0px 2px 0px #005A7F,
-                    0px 3px 0px #005A7F,
-                    0px 4px 0px #005A7F,
-                    0px 5px 0px #005A7F,
-                    0px 6px 0px #005A7F,
-                    0px 7px 0px #005A7F,
-                    0px 8px 10px rgba(0,0,0,0.5);
-            }
-            21%, 61% {
-                color: #ff3333; /* Red glitch */
-                text-shadow: 
-                    0 0 5px #ff0000,
-                    0 0 10px #ff0000,
-                    0 0 15px #ff0000;
-            }
-            41%, 81% {
-                color: #005A7F; /* Dark glitch */
-                text-shadow: none;
-            }
-        }
-
-
         /* Make font smaller on mobile */
         @media (max-width: 768px) {
             .minecraft-text {
                 font-size: 8vw;
             }
         }
-
-        /* --- Component Styles --- */
-        
-        /* Layer for all components */
-        .component-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-        
-        /* NEW: Damage Overlay for red vignette */
-        .damage-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 5; /* Below text, above components */
-            /* Creates a red vignette from the edges */
-            background: radial-gradient(circle, transparent 40%, rgba(255, 0, 0, 0.6) 110%);
-            animation: pulse-red 1s ease-in-out infinite;
-            pointer-events: none; /* Allows clicking through it */
-        }
-        
-        @keyframes pulse-red {
-            0% { opacity: 0.4; }
-            50% { opacity: 0.8; }
-            100% { opacity: 0.4; }
-        }
-
-
-        /* --- Pixel Art LED --- */
-        .led {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #00BFFF;
-            box-shadow: 0 0 10px #00BFFF, 0 0 20px #00BFFF;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        /* --- Pixel Art Resistor --- */
-        .resistor {
-            position: absolute;
-            width: 40px;
-            height: 10px;
-            background-color: #d2b48c; /* Resistor body (tan) */
-            border: 2px solid #555;
-            /* Draw bands with box-shadow */
-            box-shadow: 
-                /* Band 1 (brown) */
-                inset 8px 0 0 0 #a52a2a,
-                /* Band 2 (red) */
-                inset 14px 0 0 0 #ff0000,
-                /* Band 3 (orange) */
-                inset 20px 0 0 0 #ffa500,
-                /* Band 4 (gold) */
-                inset 28px 0 0 0 #ffd700;
-        }
-
-        /* --- Pixel Art Ceramic Capacitor --- */
-        .capacitor {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: #f57c00; /* Orange-brown color */
-            border: 2px solid #555;
-            border-radius: 50%; /* Make it circular */
-        }
-        /* Add legs */
-        .capacitor::before,
-        .capacitor::after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 8px;
-            background-color: #777;
-            bottom: -8px; /* Attach to the bottom */
-        }
-        .capacitor::before {
-            left: 6px; /* Position first leg */
-        }
-        .capacitor::after {
-            right: 6px; /* Position second leg */
-        }
-
-        /* --- Pixel Art IC Chip --- */
-        .ic-chip {
-            position: absolute;
-            width: 30px;
-            height: 50px;
-            background-color: #333; /* Black chip body */
-            border: 2px solid #555;
-            border-radius: 4px;
-        }
-        /* Legs */
-        .ic-chip::before,
-        .ic-chip::after {
-            content: '';
-            position: absolute;
-            width: 6px; /* Leg width */
-            height: 100%; /* Match chip height */
-            top: 0;
-            /* Create repeating legs */
-            background: repeating-linear-gradient(
-                to bottom,
-                #777, /* Leg color */
-                #777 8px, /* Leg height */
-                transparent 8px, /* Gap */
-                transparent 14px /* Gap size */
-            );
-        }
-        .ic-chip::before {
-            left: -8px; /* Left side legs */
-        }
-        .ic-chip::after {
-            right: -8px; /* Right side legs */
-        }
-
-        /* --- Animated Trace --- */
-        .trace {
-            position: absolute;
-            background: #00BFFF;
-            box-shadow: 0 0 5px #00BFFF;
-            border-radius: 2px;
-            opacity: 0.7;
-        }
-        
-        .trace-h { /* Horizontal trace */
-            width: 15%;
-            height: 4px;
-            animation: flow-h 5s linear infinite;
-        }
-        
-        .trace-v { /* Vertical trace */
-            width: 4px;
-            height: 20%;
-            animation: flow-v 6s linear infinite;
-        }
-
-        @keyframes flow-h {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(calc(100vw / 0.15)); } /* 100vw / width */
-        }
-        @keyframes flow-v {
-            from { transform: translateY(-100%); }
-            to { transform: translateY(calc(100vh / 0.20)); } /* 100vh / height */
-        }
-        
-        /* --- UPDATED: Spark/Blast Effect --- */
-        .spark {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background-color: #fff; /* Bright white spark */
-            box-shadow: 0 0 10px #fff, 0 0 20px #00BFFF, 0 0 30px #ff0000; /* Added red glow */
-            border-radius: 50%;
-            animation: blast 1s linear infinite; /* Faster */
-            opacity: 0;
-        }
-
-        @keyframes blast {
-            0% { 
-                transform: scale(0.5) rotate(0deg); 
-                opacity: 0;
-            }
-            50% { 
-                opacity: 1; 
-            }
-            100% { 
-                transform: scale(3.5) rotate(360deg) translateX(40px); /* Move more, spin */
-                opacity: 0; 
-            }
-        }
-        
-        /* --- NEW: Smoke Effect --- */
-        .smoke {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background: rgba(200, 200, 200, 0.2);
-            border-radius: 50%;
-            filter: blur(20px);
-            animation: fade-smoke 3s linear infinite;
-            opacity: 0;
-        }
-        @keyframes fade-smoke {
-            0% {
-                transform: scale(0.5) translateY(0);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: scale(2.5) translateY(-40px);
-                opacity: 0;
-            }
-        }
-
-
     </style>
 </head>
 <body>
-
-    <!-- Layer for components, sits behind the text -->
-    <div class="component-layer">
-        <!-- LEDs -->
-        <div class="led" style="top: 20%; left: 15%;"></div>
-        <div class="led" style="top: 80%; left: 25%; animation-duration: 0.5s;"></div>
-        <div class="led" style="top: 50%; left: 85%;"></div>
-        <div class="led" style="top: 10%; left: 70%; animation-duration: 0.8s;"></div>
-        <div class="led" style="top: 90%; left: 5%;"></div>
-        <div class="led" style="top: 5%; left: 10%;"></div>
-        <div class="led" style="top: 35%; left: 55%; animation-duration: 1.2s;"></div>
-        
-        <!-- Resistors -->
-        <div class="resistor" style="top: 30%; left: 40%;"></div>
-        <div class="resistor" style="top: 70%; left: 60%; transform: rotate(90deg);"></div>
-        <div class="resistor" style="top: 10%; left: 20%; transform: rotate(45deg);"></div>
-        <div class="resistor" style="top: 85%; left: 45%; transform: rotate(-15deg);"></div>
-
-        <!-- Capacitors -->
-        <div class="capacitor" style="top: 15%; left: 30%;"></div>
-        <div class="capacitor" style="top: 80%; left: 80%;"></div>
-        <div class="capacitor" style="top: 55%; left: 20%;"></div>
-        <div class="capacitor" style="top: 30%; left: 90%;"></div>
-
-        <!-- IC Chips -->
-        <div class="ic-chip" style="top: 40%; left: 10%;"></div>
-        <div class="ic-chip" style="top: 60%; left: 75%; transform: rotate(-30deg);"></div>
-        <div class="ic-chip" style="top: 5%; left: 45%; transform: rotate(15deg);"></div>
-        <div class="ic-chip" style="top: 85%; left: 10%; transform: rotate(90deg);"></div>
-
-        <!-- Animated Traces -->
-        <div class="trace trace-h" style="top: 25%; left: 0;"></div>
-        <div class="trace trace-v" style="top: 0; left: 30%;"></div>
-        <div class="trace trace-h" style="top: 75%; left: 0; animation-delay: -2.5s;"></div>
-        <div class="trace trace-v" style="top: 0; left: 60%; animation-delay: -1.5s;"></div>
-        <div class="trace trace-h" style="top: 50%; left: 0; animation-delay: -4s;"></div>
-        <div class="trace trace-v" style="top: 0; left: 95%; animation-delay: -3s;"></div>
-
-        <!-- Sparks -->
-        <div class="spark" style="top: 22%; left: 33%;"></div>
-        <div class="spark" style="top: 82%; left: 63%; animation-delay: -0.5s;"></div>
-        <div class="spark" style="top: 40%; left: 70%; animation-delay: -1s;"></div>
-        <div class="spark" style="top: 60%; left: 10%; animation-delay: -0.2s;"></div>
-        <div class="spark" style="top: 10%; left: 50%; animation-delay: -0.7s;"></div>
-        <div class="spark" style="top: 90%; left: 90%; animation-delay: -1.2s;"></div>
-        <div class="spark" style="top: 70%; left: 15%; animation-delay: -0.3s;"></div>
-        <div class="spark" style="top: 30%; left: 80%; animation-delay: -0.8s;"></div>
-
-        <!-- Smoke -->
-        <div class="smoke" style="top: 40%; left: 10%;"></div>
-        <div class="smoke" style="top: 60%; left: 75%; animation-delay: -1.5s;"></div>
-        <div class="smoke" style="top: 10%; left: 20%; animation-delay: -0.5s;"></div>
-    </div>
-    
-    <!-- Red damage overlay -->
-    <div class="damage-overlay"></div>
 
     <div class="container">
         <h1 class="minecraft-text">RONITROJASARA</h1>
